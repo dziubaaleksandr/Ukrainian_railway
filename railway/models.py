@@ -2,13 +2,9 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 
-class StatusOfTrain(models.Model):
-    normal = models.CharField(max_length=255, verbose_name= 'normal')
-    cancelled = models.CharField(max_length=255, verbose_name= 'cancelled')
-    diverted = models.CharField(max_length=255, verbose_name= 'diverted')
 
 class Trains(models.Model):
-    status = models.ForeignKey('StatusOfTrain', on_delete=models.PROTECT)
+    status = models.CharField('StatusOfTrain', max_length=9, choices=(('NORM', 'normal'), ('CANCELLED', 'cancelled'), ('DIV', 'diverted')), default='normal')
     from_city = models.CharField(max_length=255, verbose_name= 'from')
     to_city = models.CharField(max_length=255, verbose_name= 'to')
     departure_date = models.DateTimeField(verbose_name= 'departure_date')
