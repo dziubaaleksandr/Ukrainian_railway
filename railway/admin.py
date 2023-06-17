@@ -17,13 +17,8 @@ class SeatsAdmin(admin.ModelAdmin):
     list_display_links = ('car', 'number', 'status')
     search_fields = ('car', 'number', 'status')
 
-class ClientsAdmin(admin.ModelAdmin):
-    list_display = ('tickets', )
-    list_display_links = ('tickets', )
-    search_fields = ('tickets', )
 
 
 admin.site.register(Trains, TrainsAdmin)
 admin.site.register(Cars, CarsAdmin)
 admin.site.register(Seats, SeatsAdmin)
-admin.site.register(Clients, ClientsAdmin)

@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 
 class Trains(models.Model):
@@ -23,8 +24,7 @@ class Seats(models.Model):
     car = models.ForeignKey('Cars', on_delete=models.CASCADE, null=True)
     number = models.IntegerField(verbose_name= 'Seat number')
     status = models.BooleanField(verbose_name= 'Seat status')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return f"{self.car} {self.number}"
 
-class Clients(AbstractUser):
-    tickets = models.ForeignKey('Seats', on_delete=models.CASCADE, null=True)
