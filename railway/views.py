@@ -2,11 +2,16 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 # Create your views here.
 
+menu = ['home', 'schedule', 'diverted', 'cancelled']
 def index(request):
-    return render(request, 'railway/index.html', {'title': "Main"})
+    context = {
+        'menu': menu,
+        'title': "Home Page",
+        }
+    return render(request, "railway/index.html", context = context)
 
 def schedule(request):
-    return render(request, 'railway/schedule.html', {'title': "Main"})
+    return render(request, 'railway/schedule.html', {'title': "Schedule", 'menu': menu})
 
 def diverted(request):
     return render(request, 'railway/diverted.html', {'title': "Main"})

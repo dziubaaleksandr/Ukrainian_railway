@@ -9,6 +9,9 @@
 </head>
 <body>
     {% block mainmenu %}
+        {%for m in menu%}
+            <a href = "{% url m %}">{{m}}</a>
+        {%endfor%}
     {% endblock mainmenu %}
 
 
