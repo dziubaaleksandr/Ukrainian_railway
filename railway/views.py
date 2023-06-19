@@ -26,10 +26,30 @@ class Schedule(ListView):
     # def get_queryset(self): #Return list with elemts that meets the filter criteria
     #     return Women.objects.filter(is_published = True)
 
+class Cancelled(ListView):
+    model = Trains #Select all records from the table and try to display them as a list
+    template_name = 'railway/cancelled.html' #The path to the required html file 
+    context_object_name = 'trains' #Put list records from the table in posts 
 
-def diverted(request):
-    return render(request, 'railway/diverted.html', {'title': "Main"})
+    def get_context_data(self, *, object_list=None, **kwargs):  #Passing static and dynamic data
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Cancelled Trains Page'
+        context['menu'] = menu
+        return context
 
-def cancelled(request):
-    return render(request, 'railway/cancelled.html', {'title': "Main"})
+    def get_queryset(self): #Return list with elemts that meets the filter criteria
+        return Trains.objects.filter(status = 'CANCELLED')
 
+class Diverted(ListView):
+    model = Trains #Select all records from the table and try to display them as a list
+    template_name = 'railway/diverted.html' #The path to the required html file 
+    context_object_name = 'trains' #Put list records from the table in posts 
+
+    def get_context_data(self, *, object_list=None, **kwargs):  #Passing static and dynamic data
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Cancelled Trains Page'
+        context['menu'] = menu
+        return context
+
+    def get_queryset(self): #Return list with elemts that meets the filter criteria
+        return Trains.objects.filter(status = 'DIV')

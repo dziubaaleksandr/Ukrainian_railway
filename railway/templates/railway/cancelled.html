@@ -4,5 +4,14 @@
 
 {%block content%}
 <h1>{{title}}</h1>
-<p>cancelled</p>
+<p>Cancelled</p>
+
+<ul>
+    {%for t in trains%}
+    <h2>{{ t.from_city }} - {{ t.to_city }}</h2>
+    <h4>{{ t.departure_date }} - {{ t.arrival_date }}</h4>
+    <p>Status: {{t.status}}</p>
+    <hr>
+    {%endfor%}
+</ul>
 {%endblock content%}
