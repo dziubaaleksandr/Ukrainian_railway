@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.contrib import admin
 
 class Trains(models.Model):
+    number = models.IntegerField("TrainNumber")
     status = models.CharField('StatusOfTrain', max_length=9, choices=(('NORM', 'normal'), ('CANCELLED', 'cancelled'), ('DIV', 'diverted')), default='normal')
     from_city = models.CharField(max_length=255, verbose_name= 'from')
     to_city = models.CharField(max_length=255, verbose_name= 'to')

@@ -2,10 +2,10 @@ from django.contrib import admin
 from .models import *
 
 class TrainsAdmin(admin.ModelAdmin):
-    list_display = ('status', 'from_city', 'departure_date', 'arrival_date', )
-    list_display_links = ('status',)
+    list_display = ('number', 'status', 'from_city', 'departure_date', 'arrival_date', )
+    list_display_links = ('number',)
     search_fields = ('status', 'from_city', 'departure_date', 'arrival_date', )
-    list_editable = ('from_city', 'departure_date', 'arrival_date', )
+    list_editable = ('status', 'from_city', 'departure_date', 'arrival_date', )
 
 class CarsAdmin(admin.ModelAdmin):
     list_display = ('number', 'train')
