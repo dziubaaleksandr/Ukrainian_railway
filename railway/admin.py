@@ -13,7 +13,7 @@ class CarsAdmin(admin.ModelAdmin):
     search_fields = ('number', 'train')
     
 class SeatsAdmin(admin.ModelAdmin):
-    list_display = ('car', 'number', 'status')
+    list_display = ('car', 'number', 'user', 'status')
     list_display_links = ('car', 'number', 'status')
     search_fields = ('car', 'number', 'status')
 
