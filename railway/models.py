@@ -15,13 +15,13 @@ class Trains(models.Model):
     arrival_date = models.DateTimeField(verbose_name= 'arrival_date')
 
     def __str__(self):
-        return f"{self.from_city} {self.to_city}"
+        return f"Number {self.number} from {self.from_city} to {self.to_city}"
     
 class Cars(models.Model):
     train = models.ForeignKey('Trains', on_delete=models.SET_NULL, null=True)
     number = models.IntegerField(verbose_name= 'Car number')
     def __str__(self):
-        return f"{self.train} {self.number}"
+        return f"Train {self.train} Car number {self.number}"
 
 class Seats(models.Model):
     car = models.ForeignKey('Cars', on_delete=models.CASCADE, null=True)
@@ -29,7 +29,7 @@ class Seats(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank = True)
     status = models.CharField('SeatStatus', max_length=6, choices=(('FREE', 'free'), ('BOUGHT', 'bought')), default="FREE")
     def __str__(self):
-        return f"{self.car} {self.number}"
+        return f"Car number {self.car} Seat number {self.number}"
 
     def save(self, *args, **kwargs):
         if self.user:
