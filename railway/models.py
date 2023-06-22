@@ -13,9 +13,13 @@ class Trains(models.Model):
     to_city = models.CharField(max_length=255, verbose_name= 'to')
     departure_date = models.DateTimeField(verbose_name= 'departure_date')
     arrival_date = models.DateTimeField(verbose_name= 'arrival_date')
+    slug = models.SlugField(max_length=255, unique=False, db_index = True, verbose_name="URL")
 
     def __str__(self):
         return f"Number {self.number} from {self.from_city} to {self.to_city}"
+    
+    def get_absolute_url(self):
+        return reverse('train', kwargs = {'train_slug': self.slug})
     
 class Cars(models.Model):
     train = models.ForeignKey('Trains', on_delete=models.SET_NULL, null=True)

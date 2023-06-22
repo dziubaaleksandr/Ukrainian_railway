@@ -2,11 +2,11 @@ from django.contrib import admin
 from .models import *
 
 class TrainsAdmin(admin.ModelAdmin):
-    list_display = ('number', 'status', 'from_city', 'departure_date', 'arrival_date', )
+    list_display = ('number', 'status', 'from_city', 'to_city', 'departure_date', 'arrival_date', )
     list_display_links = ('number',)
     search_fields = ('status', 'from_city', 'departure_date', 'arrival_date', )
     list_editable = ('status', 'from_city', 'departure_date', 'arrival_date', )
-
+    prepopulated_fields = {'slug': ('from_city', 'to_city' )}
 class CarsAdmin(admin.ModelAdmin):
     list_display = ('number', 'train')
     list_display_links = ('number', 'train')
