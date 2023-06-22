@@ -53,3 +53,16 @@ class Diverted(ListView):
 
     def get_queryset(self): #Return list with elemts that meets the filter criteria
         return Trains.objects.filter(status = 'DIV')
+    
+class ShowTrain(DetailView):
+    model = Trains
+    template_name = "railway/train.html"
+    context_object_name = 'title'
+    slug_url_kwarg = "train_slug" #specify the name of slug
+
+    def get_context_data(self, *, object_list=None, **kwargs):  #Passing static and dynamic data
+        context = super().get_context_data(**kwargs)
+        context['title'] = f"Train number: {context['title'].number}"
+        context['menu'] = menu
+        context['seats'] = Seats.objects.filter(car__train__slug = self.kwargs['train_slug'])
+        return context

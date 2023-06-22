@@ -1,0 +1,11 @@
+{% extends 'railway/base.html' %}
+
+
+
+{%block content%}
+<h1>{{title}}</h1>
+{%for seat in seats%}
+    <p>Seat number: {{seat.number}}</p>    
+{%endfor%}
+
+{%endblock content%}
