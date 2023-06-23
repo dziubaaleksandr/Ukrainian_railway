@@ -9,6 +9,7 @@
     <h2>{{ t.from_city }} - {{ t.to_city }}</h2>
     <h4>{{ t.departure_date }} - {{ t.arrival_date }}</h4>
     <p>Status: {{t.status}}</p>
+    <a href = "{{ t.get_absolute_url }}">Detail Info</a>
     <hr>
     {%endfor%}
 </ul>
