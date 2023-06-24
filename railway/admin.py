@@ -14,7 +14,8 @@ class CarsAdmin(admin.ModelAdmin):
     
 class SeatsAdmin(admin.ModelAdmin):
     list_display = ('car', 'number', 'user', 'status')
-    list_display_links = ('car', 'number', 'status')
+    list_display_links = ('car', 'number',)
+    list_editable = ('user', 'status', )
     search_fields = ('car', 'number', 'status')
 
 

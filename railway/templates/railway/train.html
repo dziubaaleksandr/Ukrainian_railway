@@ -4,8 +4,45 @@
 
 {%block content%}
 <h1>{{title}}</h1>
-{%for seat in seats%}
-    <p>Seat number: {{seat.number}}</p>    
-{%endfor%}
+<form method="post" action="">
+    {% csrf_token %}
+    {%for seat in seats%}
+        <p>Seat number: {{seat.number}}</p>            
+        {% if seat.status == "BOUGHT" %}
+        <input type="checkbox" id={{seat.number}} name = {{seat.number}} disabled checked>
+        {% else %}  <!-- Display the selected page plus and minus 2 page -->
+        <input type="checkbox" id={{seat.number}} name = {{seat.number}}>
+        {#<!--{% else %}-->#}
+        {#<!--<a href="?page={{ p }}">{{p}}</a>-->#}  <!-- Display all pages range -->
+        {% endif %}
+    {%endfor%}
+    <input type="submit" value="Send"/>
+</form>
+
+
+
+
+
+<script>
+    var clicked = false
+    function myFunction(number) 
+    {
+        console.log(number)
+        if (clicked == false)
+        {
+            document.getElementById(number).style.color='red';
+            clicked = true;
+            console.log('if')
+        }
+        else
+        {
+            document.getElementById(number).style.color='black';
+            clicked = false;
+            console.log('else')
+        } 
+    }
+</script>
+
+
 
 {%endblock content%}
