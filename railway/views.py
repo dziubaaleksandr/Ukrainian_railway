@@ -1,10 +1,13 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from .models import *
+#from django.contrib.auth.forms import UserCreationForm
+from .forms import *
 # Create your views here.
 
-menu = ['home', 'schedule', 'diverted', 'cancelled']
+menu = ['home', 'schedule', 'diverted', 'cancelled', 'register']
 def index(request):
     context = {
         'menu': menu,
@@ -102,3 +105,13 @@ def buy_ticket(request, train_slug):
     return render(request, "railway/train.html", context= context)
     
    
+class RegisterUser(CreateView):
+    form_class = RegisterUserForm
+    template_name = 'railway/register.html'
+    success_url = reverse_lazy('home')
+ 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Register'
+        context['menu'] = menu
+        return context
