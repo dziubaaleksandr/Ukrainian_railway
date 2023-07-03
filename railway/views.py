@@ -78,25 +78,28 @@ def buy_ticket(request, train_slug, wagon_number):
         'seats': Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number),
         'menu': menu,
         'wagon': wagon_number,
+        'numberOfWagons': range(1,len(Cars.objects.filter(train__slug = train_slug)) + 1)
         }
     
     if request.method == 'POST':
-        seats = Seats.objects.filter(car__train__slug = train_slug)
+        seats = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number)
         is_clicked = []
         for seat in seats:
             if request.POST.get(str(seat.number)):
                 is_clicked.append(seat.number)
                 if request.user.is_authenticated:
-                    s1 = Seats.objects.filter(car__train__slug = train_slug, number = seat.number)
+                    s1 = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number, number = seat.number)
                     s1.update(user_id = request.user.id, status = 'BOUGHT')
             
         print(is_clicked)
         
-        seats = Seats.objects.filter(car__train__slug = train_slug)
+        seats = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number)
         context = {
             'title': f"Train number: {trains[0].number}",
             'seats': seats,
-            'menu': menu
+            'menu': menu,
+            'wagon': wagon_number,
+            'numberOfWagons': range(1,len(Cars.objects.filter(train__slug = train_slug)) + 1)
             }
         
     return render(request, "railway/train.html", context= context)

@@ -1,7 +1,5 @@
 {% extends 'railway/base.html' %}
 
-
-
 {%block content%}
 <h1>{{title}}</h1>
 <h2>Wagon number: {{wagon}}</h2>
@@ -10,13 +8,14 @@
     {%for seat in seats%}
         <p>Seat number: {{seat.number}}</p>            
         {% if seat.status == "BOUGHT" %}
-        <input type="checkbox" id={{seat.number}} name = {{seat.number}} disabled checked>
-        {% else %}  <!-- Display the selected page plus and minus 2 page -->
-        <input type="checkbox" id={{seat.number}} name = {{seat.number}}>
-        {#<!--{% else %}-->#}
-        {#<!--<a href="?page={{ p }}">{{p}}</a>-->#}  <!-- Display all pages range -->
+            <input type="checkbox" id={{seat.number}} name = {{seat.number}} disabled checked>
+        {% else %} 
+            <input type="checkbox" id={{seat.number}} name = {{seat.number}}>
         {% endif %}
     {%endfor%}
     <input type="submit" value="Send"/>
 </form>
+    {%for wagon in numberOfWagons %}            
+        <a href = "{% url 'train' train_slug=seats.0.car.train.slug wagon_number=wagon%}">{{wagon}}</a>
+    {%endfor%}
 {%endblock content%}
