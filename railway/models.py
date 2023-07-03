@@ -19,7 +19,7 @@ class Trains(models.Model):
         return f"Number {self.number} from {self.from_city} to {self.to_city}"
     
     def get_absolute_url(self):
-        return reverse('train', kwargs = {'train_slug': self.slug})
+        return reverse('train', kwargs = {'train_slug': self.slug, 'wagon_number': 1})
     
 class Cars(models.Model):
     train = models.ForeignKey('Trains', on_delete=models.SET_NULL, null=True)

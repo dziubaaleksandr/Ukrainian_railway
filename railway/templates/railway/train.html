@@ -4,6 +4,7 @@
 
 {%block content%}
 <h1>{{title}}</h1>
+<h2>Wagon number: {{wagon}}</h2>
 <form method="post" action="">
     {% csrf_token %}
     {%for seat in seats%}
@@ -18,31 +19,4 @@
     {%endfor%}
     <input type="submit" value="Send"/>
 </form>
-
-
-
-
-
-<script>
-    var clicked = false
-    function myFunction(number) 
-    {
-        console.log(number)
-        if (clicked == false)
-        {
-            document.getElementById(number).style.color='red';
-            clicked = true;
-            console.log('if')
-        }
-        else
-        {
-            document.getElementById(number).style.color='black';
-            clicked = false;
-            console.log('else')
-        } 
-    }
-</script>
-
-
-
 {%endblock content%}

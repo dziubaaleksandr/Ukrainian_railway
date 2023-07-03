@@ -71,13 +71,13 @@ class ShowTrain(DetailView):
         context['slugs'] = self.slug_url_kwarg
         return context
     
-def buy_ticket(request, train_slug):
+def buy_ticket(request, train_slug, wagon_number):
     trains = Trains.objects.filter(slug = train_slug)
-        
     context = {
         'title': f"Train number: {trains[0].number}",
-        'seats': Seats.objects.filter(car__train__slug = train_slug),
-        'menu': menu
+        'seats': Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number),
+        'menu': menu,
+        'wagon': wagon_number,
         }
     
     if request.method == 'POST':
@@ -89,11 +89,8 @@ def buy_ticket(request, train_slug):
                 if request.user.is_authenticated:
                     s1 = Seats.objects.filter(car__train__slug = train_slug, number = seat.number)
                     s1.update(user_id = request.user.id, status = 'BOUGHT')
-                    
-                    
             
         print(is_clicked)
-        
         
         seats = Seats.objects.filter(car__train__slug = train_slug)
         context = {
