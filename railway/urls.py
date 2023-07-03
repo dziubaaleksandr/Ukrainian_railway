@@ -9,5 +9,8 @@ urlpatterns = [
     #path('schedule/<slug:train_slug>/', ShowTrain.as_view(), name = 'train')
     path('schedule/<slug:train_slug>/<int:wagon_number>/', buy_ticket, name = 'train'),
     path('register/', RegisterUser.as_view(), name='register'),
+    path('login/', LoginUser.as_view(), name='login'),
+    path('logout/', logout_user, name='logout'),
+
    
 ]

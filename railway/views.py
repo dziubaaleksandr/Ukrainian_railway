@@ -1,13 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import logout
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from .models import *
-#from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from .forms import *
 # Create your views here.
 
-menu = ['home', 'schedule', 'diverted', 'cancelled', 'register']
+menu = ['home', 'schedule', 'diverted', 'cancelled',]
 def index(request):
     context = {
         'menu': menu,
@@ -104,7 +106,6 @@ def buy_ticket(request, train_slug, wagon_number):
         
     return render(request, "railway/train.html", context= context)
     
-   
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
     template_name = 'railway/register.html'
@@ -115,3 +116,20 @@ class RegisterUser(CreateView):
         context['title'] = 'Register'
         context['menu'] = menu
         return context
+    
+class LoginUser(LoginView):
+    form_class = AuthenticationForm
+    template_name = 'railway/login.html'
+ 
+    def get_context_data(self, *, object_list=None, **kwargs):  #Passing static and dynamic data
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Login'
+        context['menu'] = menu
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+    
+def logout_user(request):
+    logout(request)
+    return redirect('login')

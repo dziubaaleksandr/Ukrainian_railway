@@ -12,8 +12,12 @@
         {%for m in menu%}
             <a href = "{% url m %}">{{m}}</a>
         {%endfor%}
+        {% if request.user.is_authenticated %}
+            {{user.username}} | <a href="{% url 'logout' %}">logout</a>
+        {% else %}
+            <a href="{% url 'register' %}">register</a> <a href="{% url 'login' %}">login</a>
+        {% endif %}
     {% endblock mainmenu %}
-
 
     {%block content%}
 
