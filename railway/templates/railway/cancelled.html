@@ -1,11 +1,7 @@
 {% extends 'railway/base.html' %}
 
-
-
 {%block content%}
 <h1>{{title}}</h1>
-<p>Cancelled</p>
-
 <ul>
     {%for t in trains%}
     <h2>{{ t.from_city }} - {{ t.to_city }}</h2>
