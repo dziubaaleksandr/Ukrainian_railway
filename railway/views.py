@@ -74,35 +74,29 @@ class ShowTrain(DetailView):
         return context
     
 def buy_ticket(request, train_slug, wagon_number):
-    trains = Trains.objects.filter(slug = train_slug)
+    #trains = Trains.objects.filter(slug = train_slug).values('number')
+    allSeats = Seats.objects.filter(car__train__slug = train_slug,
+                                     car__number = wagon_number).select_related('car').values('number', 'status', 'car__train__slug', 'car__train__number')
     context = {
-        'title': f"Train number: {trains[0].number}",
-        'seats': Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number),
+        #'title': f"Train number: {trains[0]['number']}",
+        'title': f"Train number: {allSeats[0]['car__train__number']}",
+        'seats': Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number).select_related('car').values('number', 'status', 'car__train__slug'),
         'menu': menu,
         'wagon': wagon_number,
-        'numberOfWagons': range(1,len(Cars.objects.filter(train__slug = train_slug)) + 1)
+        'numberOfWagons': range(1, Cars.objects.filter(train__slug = train_slug).select_related('train').count() + 1),
         }
     
     if request.method == 'POST':
         seats = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number)
-        is_clicked = []
         for seat in seats:
-            if request.POST.get(str(seat.number)):
-                is_clicked.append(seat.number)
-                if request.user.is_authenticated:
-                    s1 = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number, number = seat.number)
-                    s1.update(user_id = request.user.id, status = 'BOUGHT')
-            
-        print(is_clicked)
+            if request.user.is_authenticated and request.POST.get(str(seat.number)):
+                s1 = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number, number = seat.number).select_related('car')
+                s1.update(user_id = request.user.id, status = 'BOUGHT')
+            else:
+                break
         
-        seats = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number)
-        context = {
-            'title': f"Train number: {trains[0].number}",
-            'seats': seats,
-            'menu': menu,
-            'wagon': wagon_number,
-            'numberOfWagons': range(1,len(Cars.objects.filter(train__slug = train_slug)) + 1)
-            }
+        seats = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number).select_related('car').values('number', 'status', 'car__train__slug')
+        context['seats'] = seats
         
     return render(request, "railway/train.html", context= context)
     

@@ -3,6 +3,8 @@
 {%block content%}
 <h1>{{title}}</h1>
 <h2>Wagon number: {{wagon}}</h2>
+<h2>Seat number: {{test}}</h2>
+
 <form method="post" action="">
     {% csrf_token %}
     {%for seat in seats%}
@@ -16,6 +18,6 @@
     <input type="submit" value="Send"/>
 </form>
     {%for wagon in numberOfWagons %}            
-        <a href = "{% url 'train' train_slug=seats.0.car.train.slug wagon_number=wagon%}">{{wagon}}</a>
+        <a href = "{% url 'train' train_slug=seats.0.car__train__slug wagon_number=wagon%}">{{wagon}}</a>
     {%endfor%}
 {%endblock content%}
