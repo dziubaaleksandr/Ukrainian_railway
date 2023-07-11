@@ -1,11 +1,11 @@
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from .models import *
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, AdminPasswordChangeForm
 from .forms import *
 # Create your views here.
 
@@ -120,7 +120,35 @@ class LoginUser(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('home')
-    
+
+def account(request):
+    context = {
+        'menu': menu,
+        'title': 'Account',
+        'user': request.user,
+        }
+    return render(request, 'railway/account.html', context = context)
+
+
+def change_password(request):
+    context = {
+        'menu': menu,
+        'title': 'Change password',
+        'user': request.user,
+        }
+
+    if request.method == 'POST': 
+        form = AdminPasswordChangeForm(request.user, request.POST)
+        context['form'] = form
+        if form.is_valid():
+            request.user.set_password(request.POST.get('password1'))
+            request.user.save() 
+            return redirect('login')
+    else:
+        context['form'] = AdminPasswordChangeForm(request.user)
+
+    return render(request, 'railway/change_password.html', context=context)
+
 def logout_user(request):
     logout(request)
     return redirect('login')
