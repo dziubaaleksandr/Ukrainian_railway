@@ -12,7 +12,8 @@ urlpatterns = [
     path('login/', LoginUser.as_view(), name='login'),
     path('logout/', logout_user, name='logout'),
     path('account/', account , name = 'account'),
-    path('account/change_password/', change_password , name = 'change_password'),
+    # path('account/change_password/', change_password , name = 'change_password'),
+    path('account/change_password/', ChangePassword.as_view() , name = 'change_password'),
 
    
 ]

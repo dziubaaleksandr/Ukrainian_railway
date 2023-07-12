@@ -1,12 +1,16 @@
+from typing import Any, Optional
+from django.contrib.messages.views import SuccessMessageMixin
+from django.db import models
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from django.contrib.auth.views import LoginView
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.auth import logout
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from .models import *
 from django.contrib.auth.forms import AuthenticationForm, AdminPasswordChangeForm
 from .forms import *
+
 # Create your views here.
 
 menu = ['home', 'schedule', 'diverted', 'cancelled',]
@@ -129,6 +133,19 @@ def account(request):
         }
     return render(request, 'railway/account.html', context = context)
 
+class ChangePassword(SuccessMessageMixin, PasswordChangeView):
+    form_class = AdminPasswordChangeForm
+    template_name = 'railway/change_password.html'
+    success_message = 'Password has changed!'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Изменение пароля на сайте'
+        context['menu'] = menu
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('account')
 
 def change_password(request):
     context = {
