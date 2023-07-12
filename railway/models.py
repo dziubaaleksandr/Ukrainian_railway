@@ -33,7 +33,7 @@ class Seats(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank = True)
     status = models.CharField('SeatStatus', max_length=6, choices=(('FREE', 'free'), ('BOUGHT', 'bought')), default="FREE")
     def __str__(self):
-        return f"Car number {self.car} Seat number {self.number}"
+        return f"Car number {self.car.number} Seat number {self.number}"
 
     def save(self, *args, **kwargs):
         if self.user:

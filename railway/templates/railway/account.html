@@ -1,6 +1,7 @@
 {% extends 'railway/base.html' %}
 
 {%block content%}
+{# ========START Print message if password has changed correct========== #}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -11,7 +12,10 @@
     {% endfor %}
 </ul>
 {% endif %}
+{# ========END Print message if password has changed correct========== #}
+
 <h1>{{user}}</h1>
+<a href = "{% url 'print_tickets' %}">My tickets</a>
 <a href = "{% url 'change_password' %}">Change password</a>
 
 {%endblock content%}

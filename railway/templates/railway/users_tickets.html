@@ -1,0 +1,12 @@
+{% extends 'railway/base.html' %}
+
+{%block content%}
+<ul>
+    {%for ticket in tickets%}
+    <h2>{{ ticket.car__train__from_city }} - {{ ticket.car__train__to_city }}</h2>
+    <h3>{{ ticket.car__train__departure_date }} - {{ ticket.car__train__arrival_date }}</h3>
+    <p>Place: {{ ticket.number }} Wagon number: {{ ticket.car__number }}</p>
+    <hr>
+    {%endfor%}
+</ul>
+{%endblock content%}

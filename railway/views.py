@@ -169,3 +169,20 @@ def change_password(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+class UsersTicket(ListView):
+    model = Seats 
+    template_name = 'railway/users_tickets.html' 
+    context_object_name = 'tickets' 
+
+    def get_context_data(self, *, object_list=None, **kwargs):  
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'My tickets'
+        context['menu'] = menu
+        return context
+
+    def get_queryset(self): 
+        return Seats.objects.filter(user = self.request.user).values(
+                                                                    'number', 'car__train__from_city','car__train__to_city',
+                                                                    'car__train__slug', 'car__train__departure_date', 'car__train__arrival_date',
+                                                                    'car__number')

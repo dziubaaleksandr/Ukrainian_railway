@@ -14,6 +14,7 @@ urlpatterns = [
     path('account/', account , name = 'account'),
     # path('account/change_password/', change_password , name = 'change_password'),
     path('account/change_password/', ChangePassword.as_view() , name = 'change_password'),
+    path('accounts/my_tickets/', UsersTicket.as_view(), name = 'print_tickets')
 
    
 ]
