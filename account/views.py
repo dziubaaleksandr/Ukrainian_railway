@@ -9,10 +9,11 @@ from django.contrib.auth import logout
 from railway.models import *
 from django.contrib.auth.forms import AuthenticationForm, AdminPasswordChangeForm
 from .forms import *
+from railway.utils import *
 # Create your views here.
 menu = ['home', 'schedule', 'diverted', 'cancelled',]
 
-class RegisterUser(CreateView):
+class RegisterUser(DataMixin,CreateView):
     form_class = RegisterUserForm
     template_name = 'account/register.html'
     success_url = reverse_lazy('login')
@@ -20,18 +21,18 @@ class RegisterUser(CreateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Register'
-        context['menu'] = menu
-        return context
+        c_def = self.get_user_context()
+        return dict(list(context.items()) + list(c_def.items()))
     
-class LoginUser(LoginView):
+class LoginUser(DataMixin, LoginView):
     form_class = AuthenticationForm
     template_name = 'account/login.html'
  
     def get_context_data(self, *, object_list=None, **kwargs):  #Passing static and dynamic data
         context = super().get_context_data(**kwargs)
         context['title'] = 'Login'
-        context['menu'] = menu
-        return context
+        c_def = self.get_user_context()
+        return dict(list(context.items()) + list(c_def.items()))
 
     def get_success_url(self):
         return reverse_lazy('home')
@@ -48,7 +49,7 @@ def account(request):
         }
     return render(request, 'account/account.html', context = context)
 
-class UsersTicket(ListView):
+class UsersTicket(DataMixin, ListView):
     model = Seats 
     template_name = 'account/users_tickets.html' 
     context_object_name = 'tickets' 
@@ -56,8 +57,8 @@ class UsersTicket(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):  
         context = super().get_context_data(**kwargs)
         context['title'] = 'My tickets'
-        context['menu'] = menu
-        return context
+        c_def = self.get_user_context()
+        return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self): 
         return Seats.objects.filter(user = self.request.user).values(
@@ -65,7 +66,7 @@ class UsersTicket(ListView):
                                                                     'car__train__slug', 'car__train__departure_date', 'car__train__arrival_date',
                                                                     'car__number')
     
-class ChangePassword(SuccessMessageMixin, PasswordChangeView):
+class ChangePassword(DataMixin, SuccessMessageMixin, PasswordChangeView):
     form_class = AdminPasswordChangeForm
     template_name = 'account/change_password.html'
     success_message = 'Password has changed!'

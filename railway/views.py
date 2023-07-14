@@ -2,10 +2,8 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from .models import *
-
+from .utils import *
 # Create your views here.
-
-menu = ['home', 'schedule', 'diverted', 'cancelled',]
 
 def home(request):
     context = {
@@ -14,7 +12,7 @@ def home(request):
         }
     return render(request, 'railway/home.html', context = context)
 
-class Schedule(ListView):
+class Schedule(DataMixin, ListView):
     model = Trains #Select all records from the table and try to display them as a list
     template_name = 'railway/schedule.html' #The path to the required html file 
     context_object_name = 'trains' #Put list records from the table in posts 
@@ -22,10 +20,10 @@ class Schedule(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):  #Passing static and dynamic data
         context = super().get_context_data(**kwargs)
         context['title'] = 'Train schedule'
-        context['menu'] = menu
-        return context
+        c_def = self.get_user_context()
+        return dict(list(context.items()) + list(c_def.items()))
 
-class Cancelled(ListView):
+class Cancelled(DataMixin, ListView):
     model = Trains #Select all records from the table and try to display them as a list
     template_name = 'railway/cancelled.html' #The path to the required html file 
     context_object_name = 'trains' #Put list records from the table in trains 
@@ -33,13 +31,13 @@ class Cancelled(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):  #Passing static and dynamic data
         context = super().get_context_data(**kwargs)
         context['title'] = 'Cancelled Trains'
-        context['menu'] = menu
-        return context
+        c_def = self.get_user_context()
+        return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self): #Return list with elemts that meets the filter criteria
         return Trains.objects.filter(status = 'CANCELLED')
 
-class Diverted(ListView):
+class Diverted(DataMixin, ListView):
     model = Trains #Select all records from the table and try to display them as a list
     template_name = 'railway/diverted.html' #The path to the required html file 
     context_object_name = 'trains' #Put list records from the table in trains 
@@ -47,8 +45,8 @@ class Diverted(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):  #Passing static and dynamic data
         context = super().get_context_data(**kwargs)
         context['title'] = 'Diverted Trains'
-        context['menu'] = menu
-        return context
+        c_def = self.get_user_context()
+        return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self): #Return list with elemts that meets the filter criteria
         return Trains.objects.filter(status = 'DIV')
@@ -62,10 +60,10 @@ class ShowTrain(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):  #Passing static and dynamic data
         context = super().get_context_data(**kwargs)
         context['title'] = f"Train number: {context['trains'].number}"
-        context['menu'] = menu
         context['seats'] = Seats.objects.filter(car__train__slug = self.kwargs['train_slug'])
         context['slugs'] = self.slug_url_kwarg
-        return context
+        c_def = self.get_user_context()
+        return dict(list(context.items()) + list(c_def.items()))
 
 def buy_ticket(request, train_slug, wagon_number):
     allSeats = list(Seats.objects.filter(car__train__slug = train_slug,
