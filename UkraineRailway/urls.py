@@ -20,6 +20,7 @@ from UkraineRailway import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("railway.urls")),
+    path('account/', include("account.urls")),
 ]
 
 if settings.DEBUG:
