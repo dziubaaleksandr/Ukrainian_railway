@@ -7,7 +7,7 @@
     {% csrf_token %}
     {%for seat in seats%}
         <p>Seat number: {{seat.number}}</p>            
-        {% if seat.status == "BOUGHT" %}
+        {% if seat.status == "BOUGHT" or seat.car__train__status != "NORM" %}
             <input type="checkbox" id={{seat.number}} name = {{seat.number}} disabled checked>
         {% else %} 
             <input type="checkbox" id={{seat.number}} name = {{seat.number}}>

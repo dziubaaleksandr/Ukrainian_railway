@@ -67,7 +67,7 @@ class ShowTrain(DetailView):
 
 def buy_ticket(request, train_slug, wagon_number):
     allSeats = list(Seats.objects.filter(car__train__slug = train_slug,
-                                     car__number = wagon_number).values('number', 'status', 'car__train__slug', 'car__train__number'))
+                                     car__number = wagon_number).values('number', 'status', 'car__train__slug', 'car__train__number', 'car__train__status'))
     
     context = {
         'title': f"Train number: {allSeats[0]['car__train__number']}",
@@ -86,7 +86,7 @@ def buy_ticket(request, train_slug, wagon_number):
             else:
                 break
         
-        seats = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number).values('number', 'status', 'car__train__slug')
+        seats = Seats.objects.filter(car__train__slug = train_slug, car__number = wagon_number).values('number', 'status', 'car__train__slug', 'car__train__status')
         context['seats'] = seats
         
     return render(request, 'railway/train.html', context = context)
