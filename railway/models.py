@@ -26,6 +26,9 @@ class Cars(models.Model):
     number = models.IntegerField(verbose_name= 'Car number')
     def __str__(self):
         return f"Train {self.train} Car number {self.number}"
+    
+    def get_absolute_url(self):
+        return reverse('train', kwargs = {'train_slug': self.train.slug, 'wagon_number': self.number})
 
 class Seats(models.Model):
     car = models.ForeignKey('Cars', on_delete=models.CASCADE, null=True)

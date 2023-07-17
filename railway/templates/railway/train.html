@@ -15,7 +15,7 @@
     {%endfor%}
     <input type="submit" value="Send"/>
 </form>
-    {%for wagon in numberOfWagons %}            
-        <a href = "{% url 'train' train_slug=seats.0.car__train__slug wagon_number=wagon%}">{{wagon}}</a>
+    {%for wagon in wagons %}            
+        <a href = "{{ wagon.get_absolute_url }}">{{wagon.number}}</a>
     {%endfor%}
 {%endblock content%}
