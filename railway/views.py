@@ -68,12 +68,13 @@ class ShowTrain(DetailView):
 def buy_ticket(request, train_slug, wagon_number):
     allSeats = list(Seats.objects.filter(car__train__slug = train_slug,
                                      car__number = wagon_number).values('number', 'status', 'car__train__slug', 'car__train__number'))
+    
     context = {
         'title': f"Train number: {allSeats[0]['car__train__number']}",
         'seats': allSeats,
         'menu': menu,
         'wagon': wagon_number,
-        'numberOfWagons': range(1, Cars.objects.filter(train__slug = train_slug).select_related('train').count() + 1),
+        'wagons': Cars.objects.filter(train__slug = train_slug).select_related('train'),
         }
     
     if request.method == 'POST':
