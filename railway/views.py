@@ -1,8 +1,10 @@
+from typing import Any, Dict
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from .models import *
 from .utils import *
+from .forms import *
 # Create your views here.
 
 def home(request):
@@ -11,6 +13,30 @@ def home(request):
         'title': 'Website of Ukraine Railway Station',
         }
     return render(request, 'railway/home.html', context = context)
+
+
+class RailwayHome(DataMixin, ListView):
+    model = Trains
+    template_name = 'railway/home.html'
+    context_object_name = 'trains'
+
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['form'] = TrainSearchForm()
+        if self.request.GET:
+            context['form'] = TrainSearchForm(self.request.GET)
+        c_def = self.get_user_context()
+        return dict(list(context.items()) + list(c_def.items()))
+    
+
+    def get_queryset(self): #Return list with elemts that meets the filter criteria
+        if self.request.GET.get('from_city') and self.request.GET.get('to_city'):
+            from_city = self.request.GET.get('from_city')
+            to_city = self.request.GET.get('to_city')
+            return Trains.objects.filter(from_city = from_city, to_city = to_city )if Trains.objects.filter(from_city = from_city, to_city = to_city) else None
+        return []
+
 
 class Schedule(DataMixin, ListView):
     model = Trains #Select all records from the table and try to display them as a list
@@ -22,6 +48,7 @@ class Schedule(DataMixin, ListView):
         context['title'] = 'Train schedule'
         c_def = self.get_user_context()
         return dict(list(context.items()) + list(c_def.items()))
+
 
 class Cancelled(DataMixin, ListView):
     model = Trains #Select all records from the table and try to display them as a list
@@ -37,6 +64,7 @@ class Cancelled(DataMixin, ListView):
     def get_queryset(self): #Return list with elemts that meets the filter criteria
         return Trains.objects.filter(status = 'CANCELLED')
 
+
 class Diverted(DataMixin, ListView):
     model = Trains #Select all records from the table and try to display them as a list
     template_name = 'railway/diverted.html' #The path to the required html file 
@@ -51,6 +79,7 @@ class Diverted(DataMixin, ListView):
     def get_queryset(self): #Return list with elemts that meets the filter criteria
         return Trains.objects.filter(status = 'DIV')
     
+
 class ShowTrain(DetailView):
     model = Trains
     template_name = 'railway/train.html'
